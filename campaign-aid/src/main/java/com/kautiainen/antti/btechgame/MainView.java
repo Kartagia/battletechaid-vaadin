@@ -49,12 +49,6 @@ public class MainView extends VerticalLayout implements ComponentEventListener<C
         return menuBar;
     }
 
-
-    private CampaignView campaign = null;
-
-
-    private LoginView login = null;
-
     @SuppressWarnings("unsafe")
     public MainView() {
         MenuBar menuBar = createMenuBar(this);
@@ -86,12 +80,12 @@ public class MainView extends VerticalLayout implements ComponentEventListener<C
      * @return True, if and only if the user has logged in.
      */
     protected boolean isLogged() {
-        return this.login != null;
+        return true;
     }
 
     private void performCreateCampaign(ClickEvent<MenuItem> event) {
         if (isLogged()) {
-            event.getSource().getUI().ifPresent( ui -> ui.navigate("/campaign/create"));
+            event.getSource().getUI().ifPresent( ui -> ui.navigate("/users/campaign/create"));
         } else {
             event.getSource().setEnabled(false);
         }
@@ -99,7 +93,7 @@ public class MainView extends VerticalLayout implements ComponentEventListener<C
 
     private void performOpenCampaign(ClickEvent<MenuItem> event) {
         if (isLogged()) {
-            event.getSource().getUI().ifPresent( ui -> ui.navigate("/campaign/open"));
+            event.getSource().getUI().ifPresent( ui -> ui.navigate("/users/campaign/show"));
         } else {
             event.getSource().setEnabled(false);
         }
@@ -115,7 +109,7 @@ public class MainView extends VerticalLayout implements ComponentEventListener<C
 
     private void performSignIn(ClickEvent<MenuItem> event) {
         if (isLogged()) {
-            event.getSource().getUI().ifPresent( ui -> ui.navigate("/account/create"));
+            event.getSource().getUI().ifPresent( ui -> ui.navigate("/signup"));
         } else {
             event.getSource().setEnabled(false);
         }
