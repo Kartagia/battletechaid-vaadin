@@ -1,3 +1,9 @@
-*/target/*
-*/src/main/frontend/generated/*
-*/.vscode/*
+target
+src/main/frontend/generated
+.vscode
+node_modules
+*/node_modules
+campaign-aid/node_modules
+campaign-aid/target
+campaign-aid/src/main/node_modules
+campaign-aid/src/**/generated
