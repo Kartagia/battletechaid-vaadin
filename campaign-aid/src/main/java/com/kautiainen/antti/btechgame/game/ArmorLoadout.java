@@ -3,44 +3,17 @@ package com.kautiainen.antti.btechgame.game;
 /**
  * The armor loadout of a location.
  */
-public class ArmorLoadout {
+public class ArmorLoadout extends HitLocationTrack {
 
     /**
-     * The hit location of the armor loadout.
-     */
-    public final HitLocation location;
-
-    /**
-     * The maximum number of armor.
-     * If this value is undefined, the loadout does not alter the maximum armor.
-     */
-    public final Short max; 
-
-    /**
-     * The current amount of armor.
-     */
-    public final short current;
-
-    /**
-     * 
-     * @param location
-     * @param maximum
-     * @param current
-     * @throws IllegalArgumentException
+     * Create a new armor loadout.
+     * @param location The location.
+     * @param maximum The maximum value. If undefined, the loadout does not affect the maximum.
+     * @param current The current value.
+     * @throws IllegalArgumentException The location, maximum or current was invalid.
      */
     public ArmorLoadout(HitLocation location, Integer maximum, int current) throws IllegalArgumentException {
-        if (current < Short.MIN_VALUE) throw new IllegalArgumentException("The current value too small");
-        if (current > Short.MAX_VALUE) throw new IllegalArgumentException("The current value too large");
-        if (maximum != null) {
-            if (maximum < Short.MIN_VALUE) throw new IllegalArgumentException("The maximal value too small");
-            if (maximum > Short.MAX_VALUE) throw new IllegalArgumentException("The maximal value too large");
-            if (current > maximum) {
-                throw new IllegalArgumentException("The current armor exceeds the maximum");
-            }
-        }
-        this.location = location;
-        this.max = maximum == null ? null : maximum.shortValue();
-        this.current = (short)current;
+        super(location, maximum, current);
     }
 
     /**
@@ -52,11 +25,35 @@ public class ArmorLoadout {
         this(location, maximum, 0);
     }
 
+    @Override
+    public ArmorLoadout addMaximum(int amount) {
+        return new ArmorLoadout(this.location, this.max == null ? amount : this.max.intValue() + amount, this.current);
+    }
+
+    @Override
+    public ArmorLoadout addCurrent(int amount) {
+        return new ArmorLoadout(this.location, this.max == null ? null : this.max.intValue(), this.current + amount);
+    }
+
+    /**
+     * Create armor damage representing loadout.
+     * @param location The target location.
+     * @param amount THe amount of damage received.
+     * @returns The armor loadout representing an armor damage event.
+     * @throws IllegalArgumentException The location or armount was invalid. 
+     */
     public static ArmorLoadout ofDamage(HitLocation location, int amount) throws IllegalArgumentException  {
         if (amount < 0) throw new IllegalArgumentException("Negative armor damage"); 
         return new ArmorLoadout(location, null, -amount);
     }
 
+    /**
+     * Create armor repair representing loadout.
+     * @param location The target location.
+     * @param amount THe amount of damage repaired.
+     * @returns The armor loadout representing an armor repair event.
+     * @throws IllegalArgumentException The location or armount was invalid. 
+     */
     public static ArmorLoadout ofRepair(HitLocation location, int amount) throws IllegalArgumentException  {
         if (amount < 0) throw new IllegalArgumentException("Negative armor repair"); 
         return new ArmorLoadout(location, null, amount);
